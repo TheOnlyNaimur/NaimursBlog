@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum LibraryItemType {
+  TEXTBOOK
+  PAPER
+  ARTICLE
+  THESIS
+  NOTE
+  LINK
+}
+
+enum LibraryItemStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model User {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(USER)
+  avatar       String   @default("/avatars/default-user.png")
+  posts        Post[]
+  libraryItems LibraryItem[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Post {
+  id             String      @id @default(auto()) @map("_id") @db.ObjectId
+  title          String
+  slug           String      @unique
+  category       String
+  titleImage     String?
+  technologyTags String[]
+  authors        Json
+  publishDate    DateTime?
+  status         PostStatus  @default(DRAFT)
+  featured       Boolean     @default(false)
+  keepInFeed     Boolean     @default(false)
+  feedOrder      Int?
+  content        Json
+  publishedAt    DateTime?
+  createdById    String      @db.ObjectId
+  createdBy      User        @relation(fields: [createdById], references: [id])
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+}
+
+model LibraryItem {
+  id           String             @id @default(auto()) @map("_id") @db.ObjectId
+  title        String
+  slug         String             @unique
+  itemType     LibraryItemType
+  authors      Json
+  year         Int?
+  publisher    String?
+  subject      String
+  tags         String[]
+  coverImage   String?
+  resourceUrl  String?
+  notes        String
+  status       LibraryItemStatus  @default(DRAFT)
+  featured     Boolean            @default(false)
+  pinned       Boolean            @default(false)
+  visible      Boolean            @default(true)
+  priority     Int?
+  publishedAt  DateTime?
+  createdById  String             @db.ObjectId
+  createdBy    User               @relation(fields: [createdById], references: [id])
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+}

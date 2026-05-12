@@ -9,9 +9,21 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@prisma/client": "6.19",
+    "@tiptap/extension-image": "^3.23.1",
+    "@tiptap/extension-link": "^3.23.1",
+    "@tiptap/extension-placeholder": "^3.23.1",
+    "@tiptap/extension-text-align": "^3.23.1",
+    "@tiptap/extension-typography": "^3.23.1",
+    "@tiptap/extension-underline": "^3.23.1",
+    "@tiptap/extension-youtube": "^3.23.1",
+    "@tiptap/react": "^3.23.1",
+    "@tiptap/starter-kit": "^3.23.1",
+    "lucide-react": "^1.14.0",
     "next": "16.2.4",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "react-icons": "^5.6.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -20,6 +32,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
+    "prisma": "6.19",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

@@ -1,65 +1,102 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useState } from "react";
+import { Navbar } from "@/components/shared/navbar";
+import { NewsletterCard } from "@/components/shared/newsletterCard";
+import { FeedCard } from "@/components/shared/feedCard";
+import { posts } from "@/lib/mockdata/posts";
+
+export default function HomePage() {
+  const [activeTab, setActiveTab] = useState("ALL POSTS");
+
+  const filteredPosts =
+    activeTab === "ALL POSTS"
+      ? posts
+      : posts.filter((post) => post.category === activeTab);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+    <>
+      <Navbar title="Naimurs Blog" />
+
+      <main className="mx-auto w-full max-w-6xl px-6 py-12 pb-24">
+        <header className="mb-12 flex items-end justify-between border-b border-[var(--color-border)] pb-4">
+          <div>
+            <p className="text-[10px] uppercase tracking-[0.2em] text-[var(--color-text)]/60">
+              Archive
+            </p>
+            <h2 className="font-serif text-[24px] italic text-[var(--color-text)]">
+              The Curated Feed
+            </h2>
+          </div>
+
+          <nav className="flex gap-8 text-[11px] font-medium uppercase tracking-[0.15em]">
+            {["ALL POSTS", "TECHNICAL", "GENERAL"].map((tab) => (
+              <button
+                key={tab}
+                type="button"
+                onClick={() => setActiveTab(tab)}
+                className={`pb-4 -mb-[17px] transition-all duration-300 ${
+                  activeTab === tab
+                    ? "border-b-2 border-[var(--color-accent)] text-[var(--color-text)]"
+                    : "text-[var(--color-text)]/40 hover:text-[var(--color-text)]"
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </nav>
+        </header>
+
+        <div className="grid grid-cols-1 gap-16 lg:grid-cols-[1fr_320px]">
+          <div className="space-y-12">
+            {filteredPosts[0] && (
+              <div className="h-80">
+                <FeedCard
+                  post={filteredPosts[0]}
+                  isHorizontal
+                  className="h-full"
+                />
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+              {filteredPosts.slice(1, 3).map((post) => (
+                <div key={post.id} className="h-80">
+                  <FeedCard post={post} className="h-full" />
+                </div>
+              ))}
+            </div>
+
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+              {filteredPosts.slice(3, 5).map((post) => (
+                <div key={post.id} className="h-80">
+                  <FeedCard post={post} className="h-full" />
+                </div>
+              ))}
+            </div>
+
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+              {filteredPosts.slice(5, 7).map((post) => (
+                <div key={post.id} className="h-80">
+                  <FeedCard post={post} className="h-full" />
+                </div>
+              ))}
+            </div>
+
+            {filteredPosts.length === 0 && (
+              <p className="text-sm text-[var(--color-text)]/50">
+                No posts available in this category.
+              </p>
+            )}
+          </div>
+
+          <aside className="hidden lg:block">
+            <div className="sticky top-24">
+              <NewsletterCard />
+            </div>
+          </aside>
         </div>
       </main>
-    </div>
+    </>
   );
 }
